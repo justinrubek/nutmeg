@@ -7,6 +7,7 @@
     config,
     pkgs,
     system,
+    inputs',
     ...
   }: let
     rust-stable = self.lib.rust-stable system;
@@ -18,6 +19,7 @@
       rustfmt
       bacon
       cocogitto
+      inputs'.bomper.packages.cli
       miniserve
     ];
 
