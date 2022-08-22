@@ -3,17 +3,12 @@ use bevy_egui::{egui, EguiContext, EguiPlugin};
 
 use crate::{Name, Person};
 
+#[derive(Default)]
 pub struct GuiPlugin {}
 
 impl Plugin for GuiPlugin {
     fn build(&self, app: &mut App) {
         app.add_plugin(EguiPlugin).add_system(ui_add_person);
-    }
-}
-
-impl Default for GuiPlugin {
-    fn default() -> Self {
-        Self {}
     }
 }
 
