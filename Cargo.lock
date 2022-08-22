@@ -988,19 +988,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "client"
-version = "0.1.0"
-dependencies = [
- "bevy",
- "bevy_egui",
- "console_error_panic_hook",
- "serde",
- "tracing-subscriber",
- "tracing-wasm",
- "wasm-bindgen",
-]
-
-[[package]]
 name = "cocoa"
 version = "0.24.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2324,7 +2311,27 @@ dependencies = [
 ]
 
 [[package]]
+name = "nutmeg_client"
+version = "0.2.1"
+dependencies = [
+ "bevy",
+ "bevy_egui",
+ "console_error_panic_hook",
+ "serde",
+ "tracing-subscriber",
+ "tracing-wasm",
+ "wasm-bindgen",
+]
+
+[[package]]
 name = "nutmeg_core"
+version = "0.2.1"
+dependencies = [
+ "bevy",
+]
+
+[[package]]
+name = "nutmeg_server"
 version = "0.2.1"
 dependencies = [
  "bevy",
@@ -2702,13 +2709,6 @@ dependencies = [
  "itoa",
  "ryu",
  "serde",
-]
-
-[[package]]
-name = "server"
-version = "0.1.0"
-dependencies = [
- "bevy",
 ]
 
 [[package]]

@@ -24,7 +24,7 @@ jobs:
           authToken: "${{ secrets.CACHIX_AUTH_TOKEN }}"
 
       - name: test
-        run: nix develop -c 'cargo test'
+        run: nix develop -c cargo test
 
   bump-version:
     name: bump version
@@ -55,7 +55,7 @@ jobs:
           authToken: "${{ secrets.CACHIX_AUTH_TOKEN }}"
 
       - name: bump version
-        run: nix develop -c 'cog bump --auto'
+        run: nix develop -c cog bump --auto
 
       - name: push updates
         run: |
