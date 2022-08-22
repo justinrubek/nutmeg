@@ -45,6 +45,11 @@
         LD_LIBRARY_PATH = pkgs.lib.makeLibraryPath buildInputs;
         inherit (self.checks.${system}.pre-commit) shellHook;
       };
+      cli = pkgs.mkShell rec {
+        buildInputs = allBuildInputs [rust-nightly] ++ devTools;
+        nativeBuildInputs = self.lib.bevyNativeBuildInputs pkgs;
+        LD_LIBRARY_PATH = pkgs.lib.makeLibraryPath buildInputs;
+      };
     };
   };
 }
