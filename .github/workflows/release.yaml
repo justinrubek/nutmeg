@@ -28,7 +28,7 @@ jobs:
       - name: get version
         id: get-version
         run: |
-          VERSION="git describe --tags `git rev-list --tags --max-count=1`"
+          VERSION=`git describe --tags $(git rev-list --tags --max-count=1)`
           echo ::set-output name=version::"$VERSION"
 
       - name: generate changelog
