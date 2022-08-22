@@ -69,8 +69,8 @@ jobs:
 
       - name: copy files
         run: |
-          cp ./result/wasm/client.js public
-          cp ./result/wasm/client_bg.wasm public
+          cp ./result/wasm/nutmeg_client.js public
+          cp ./result/wasm/nutmeg_client_bg.wasm public
 
       - name: deploy to pages
         if: success()
