@@ -2,6 +2,15 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## 0.2.1 - 2022-08-22
+#### Build system
+- Configure project with cog and bomper - (99da9bf) - Justin Rubek
+#### Miscellaneous Chores
+- **(gitignore)** update .gitignore - (bb355cc) - Justin Rubek
+- **(version)** 0.2.0 - (fde680d) - Justin Rubek
+
+- - -
+
 ## 0.2.0 - 2022-08-22
 #### Miscellaneous Chores
 - **(gitignore)** update .gitignore - (d76b033) - Justin Rubek
