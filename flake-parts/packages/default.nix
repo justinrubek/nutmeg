@@ -61,13 +61,9 @@
 
           cargo build --release --target wasm32-unknown-unknown --manifest-path=crates/client/Cargo.toml
 
-          # wasm-bindgen --no-typescript --out-name nutmeg-client --out-dir wasm --target web target/wasm32-unknown-unknown/release/client.wasm
-          wasm-bindgen --out-dir $out/wasm --target web target/wasm32-unknown-unknown/release/client.wasm
+          wasm-bindgen --out-dir $out/wasm --target web target/wasm32-unknown-unknown/release/nutmeg_client.wasm
         '';
         installPhase = ''
-          # mkdir $out
-          # cp target/wasm32-unknown-unknown/release/client.wasm $out/nutmeg_client.wasm
-          # cp crates/client/wa
           echo 'Skipping installPhase'
         '';
         doCheck = false;

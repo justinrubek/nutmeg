@@ -1,0 +1,14 @@
+[file."crates/client/Cargo.toml"]
+search_value = "nutmeg_client"
+
+[file."crates/server/Cargo.toml"]
+search_value = "nutmeg_server"
+
+[file."crates/nutmeg_core/Cargo.toml"]
+search_value = "nutmeg_core"
+
+[file."Cargo.lock"]
+search_value = "nutmeg"
+
+[file."flake-parts/packages/default.nix"]
+search_value = "nutmeg"
