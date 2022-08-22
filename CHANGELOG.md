@@ -2,6 +2,13 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## 0.4.6 - 2022-08-22
+#### Continuous Integration
+- fixed name of package when copying in action - (286d6de) - Justin Rubek
+- fixed name of cli devshell - (f370aad) - Justin Rubek
+
+- - -
+
 ## 0.4.5 - 2022-08-22
 #### Continuous Integration
 - added separate CI devshell - (a3624c9) - Justin Rubek
