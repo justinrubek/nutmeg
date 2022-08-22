@@ -2,6 +2,18 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## 0.4.0 - 2022-08-22
+#### Build system
+- **(cargo)** remove profile in sub-crate - (d336819) - Justin Rubek
+#### Continuous Integration
+- re-remove clippy check - (d3cfe68) - Justin Rubek
+- re-add clippy check - (9b8a6fc) - Justin Rubek
+- Rework actions for ergonomics - (0ca1f2d) - Justin Rubek
+#### Features
+- make ball follow cursor - (7094d6e) - Justin Rubek
+
+- - -
+
 ## 0.3.0 - 2022-08-22
 #### Continuous Integration
 - fixed naming of CD workflow - (039c06a) - Justin Rubek
