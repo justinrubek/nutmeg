@@ -33,15 +33,17 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: configure rust toolchain
-        uses: actions-rs/toolchain@v1
+      - name: Install nix
+        uses: cachix/install-nix-action@v15
         with:
-          toolchain: nightly
-          components: clippy
-          override: true
+          extra_nix_config: |
+            access-tokens = github=${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup nix cache
+        uses: cachix/cachix-action@v10
+        with:
+          name: justinrubek
+          authToken: "${{ secrets.CACHIX_AUTH_TOKEN }}"
 
       - name: run clippy
-        uses: actions-rs/clippy-check@v1
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          args: --all-features -- -D warnings
+        run: nix develop -c cargo clippy --all-features -- -D warnings
