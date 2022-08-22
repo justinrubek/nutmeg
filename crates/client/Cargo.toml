@@ -25,13 +25,3 @@ tracing-wasm = "0.2"
 
 [dev-dependencies]
 bevy = { version = "0.8.0", default-features = false, features = ["x11", "bevy_winit"] }
-
-[profile.release]
-opt-level = 2 # fast and small wasm
-
-[profile.wasm-release]
-inherits = "release"
-
-opt-level = "z"
-lto = "fat"
-codegen-units = 1
