@@ -22,7 +22,7 @@
       default = packages.cli;
       client = pkgs.rustPlatform.buildRustPackage {
         pname = "nutmeg-client";
-        version = "0.4.4";
+        version = "0.4.5";
 
         buildAndTestSubdir = "crates/client";
         src = self.lib.flake_source;
@@ -33,7 +33,7 @@
       };
       server = pkgs.rustPlatform.buildRustPackage {
         pname = "nutmeg-server";
-        version = "0.4.4";
+        version = "0.4.5";
 
         buildAndTestSubdir = "crates/server";
         src = self.lib.flake_source;
@@ -44,7 +44,7 @@
       };
       client-wasm = pkgs.rustPlatform.buildRustPackage {
         pname = "nutmeg-client-wasm";
-        version = "0.4.4";
+        version = "0.4.5";
 
         buildAndTestSubdir = "crates/client";
         src = self.lib.flake_source;

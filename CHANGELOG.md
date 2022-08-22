@@ -2,6 +2,12 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## 0.4.5 - 2022-08-22
+#### Continuous Integration
+- added separate CI devshell - (a3624c9) - Justin Rubek
+
+- - -
+
 ## 0.4.4 - 2022-08-22
 #### Continuous Integration
 - fetch all commits when bumping - (f3ba7cf) - Justin Rubek
