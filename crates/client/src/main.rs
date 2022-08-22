@@ -1,9 +1,12 @@
 use bevy::prelude::*;
 
+mod gui;
+
 fn main() {
     App::new()
         .add_plugins(DefaultPlugins)
         .add_plugin(HelloPlugin)
+        .add_plugin(gui::GuiPlugin::default())
         .run();
 }
 
