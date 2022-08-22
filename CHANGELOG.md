@@ -2,6 +2,20 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## 0.3.0 - 2022-08-22
+#### Continuous Integration
+- fixed naming of CD workflow - (039c06a) - Justin Rubek
+- split ci and cd into separate workflows - (c895bf8) - Justin Rubek
+- fixed package names and test commands - (fdb4551) - Justin Rubek
+- added auto version bumping - (f5ef65a) - Justin Rubek
+#### Documentation
+- **(README)** added spacing - (1bce618) - Justin Rubek
+- add README - (7125781) - Justin Rubek
+#### Features
+- added moving ball - (ec063f9) - Justin Rubek
+
+- - -
+
 ## 0.2.1 - 2022-08-22
 #### Build system
 - Configure project with cog and bomper - (99da9bf) - Justin Rubek
