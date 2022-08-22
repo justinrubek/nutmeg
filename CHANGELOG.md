@@ -2,6 +2,12 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## 0.4.7 - 2022-08-22
+#### Bug Fixes
+- rename script import in index.html - (4faffcc) - Justin Rubek
+
+- - -
+
 ## 0.4.6 - 2022-08-22
 #### Continuous Integration
 - fixed name of package when copying in action - (286d6de) - Justin Rubek
