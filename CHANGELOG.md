@@ -2,6 +2,12 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## 0.4.3 - 2022-08-22
+#### Continuous Integration
+- remove quotes around call using nix develop -c - (3bb19b6) - Justin Rubek
+
+- - -
+
 ## 0.4.2 - 2022-08-22
 #### Continuous Integration
 - properly execute git command to determine version - (fffc52d) - Justin Rubek
