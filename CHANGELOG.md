@@ -2,6 +2,12 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## 0.4.1 - 2022-08-22
+#### Continuous Integration
+- remove dependency on job that didn't exist - (e6b70c4) - Justin Rubek
+
+- - -
+
 ## 0.4.0 - 2022-08-22
 #### Build system
 - **(cargo)** remove profile in sub-crate - (d336819) - Justin Rubek
