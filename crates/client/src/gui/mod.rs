@@ -13,11 +13,11 @@ impl Plugin for GuiPlugin {
 }
 
 #[derive(Default)]
-struct UiAddPersonState {
+pub struct UiAddPersonState {
     name: String,
 }
 
-fn ui_add_person(
+pub fn ui_add_person(
     mut egui_context: ResMut<EguiContext>,
     mut ui_state: Local<UiAddPersonState>,
     mut commands: Commands,
