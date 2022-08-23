@@ -1,4 +1,5 @@
-use bevy::{prelude::*, sprite::MaterialMesh2dBundle};
+use bevy::prelude::*;
+use bevy_rapier2d::prelude::*;
 
 pub mod gui;
 
@@ -48,69 +49,105 @@ impl Plugin for HelloPlugin {
 }
 
 const BALL_STARTING_POSITION: Vec3 = Vec3::new(0.0, -50.0, 1.0);
-const BALL_SIZE: Vec3 = Vec3::new(30.0, 30.0, 0.0);
-const BALL_COLOR: Color = Color::rgb(1.0, 0.5, 0.5);
+const BALL_SIZE: f32 = 30.0;
 
 #[derive(Component)]
 pub struct Ball;
 
-#[derive(Component, Deref, DerefMut)]
-pub struct Velocity(Vec2);
-
 #[derive(Component)]
 pub struct LocalPlayer;
 
-pub fn setup(
-    mut commands: Commands,
-    mut meshes: ResMut<Assets<Mesh>>,
-    mut materials: ResMut<Assets<ColorMaterial>>,
-) {
+#[derive(Component)]
+pub struct Camera;
+
+pub fn setup(mut commands: Commands) {
     // camera
-    commands.spawn_bundle(Camera2dBundle::default());
+    commands
+        .spawn_bundle(Camera2dBundle::default())
+        .insert(Camera);
 
     // ball
     commands
         .spawn()
         .insert(Ball)
         .insert(LocalPlayer)
-        .insert_bundle(MaterialMesh2dBundle {
-            mesh: meshes.add(shape::Circle::default().into()).into(),
-            material: materials.add(ColorMaterial::from(BALL_COLOR)),
-            transform: Transform::from_translation(BALL_STARTING_POSITION).with_scale(BALL_SIZE),
-            ..default()
+        .insert(RigidBody::Dynamic)
+        .insert(Collider::ball(BALL_SIZE))
+        .insert(GravityScale(0.0))
+        .insert(Sensor)
+        .insert_bundle(TransformBundle::from(Transform::from_translation(
+            BALL_STARTING_POSITION,
+        )))
+        .insert(Restitution::coefficient(0.7))
+        .insert(Velocity {
+            linvel: Vec2::new(1.0, 2.0),
+            angvel: 0.0,
         })
-        .insert(Velocity(Vec2::new(0.0, 0.0)));
+        .insert(SpeedLimit(50.0))
+        .insert(ColliderMassProperties::Density(2.0))
+        .insert(ExternalForce {
+            force: Vec2::new(2.0, 0.0),
+            torque: 0.0,
+        });
+    /*
+    .insert_bundle(MaterialMesh2dBundle {
+        mesh: meshes.add(shape::Circle::default().into()).into(),
+        material: materials.add(ColorMaterial::from(BALL_COLOR)),
+        transform: Transform::from_translation(BALL_STARTING_POSITION).with_scale(BALL_SIZE),
+        ..default()
+    });
+    */
 }
-
-const TIME_STEP: f32 = 1.0 / 60.0;
-
-pub fn apply_velocity(mut query: Query<(&mut Transform, &Velocity)>) {
-    for (mut transform, velocity) in query.iter_mut() {
-        transform.translation.x += velocity.x * TIME_STEP;
-        transform.translation.y += velocity.y * TIME_STEP;
-    }
-}
-
-const MAX_SPEED: f32 = 200.0;
 
 /// Determines movement for the player controlled ball.
 pub fn capture_mouse_input(
     windows: Res<Windows>,
-    mut q: Query<(&LocalPlayer, &mut Velocity, &Transform)>,
+    mut q: Query<(&LocalPlayer, &mut ExternalForce, &Transform)>,
+    camera: Query<&Transform, With<Camera>>,
 ) {
     let window = windows.get_primary().unwrap();
 
     let cursor_position = window.cursor_position();
-    let (_player, mut velocity, transform) = q.single_mut();
+    let (_player, mut ext_force, transform) = q.single_mut();
     let ball_center = transform.translation.truncate();
+    println!("cursor: {:?}", cursor_position);
+    println!("ball center: {:?}", ball_center);
 
     if let Some(position) = cursor_position {
+        // Determine the world space coords for the cursor
+        let norm = Vec3::new(
+            position.x - window.width() / 2.,
+            position.y - window.height() / 2.,
+            0.0,
+        );
+        let cam_transform = camera.single();
+        let world_space = cam_transform.mul_vec3(norm);
+        println!("world space: {:?}", world_space);
         // Change the velocity to be towards the cursor
         // let direction = (position - ball_center).normalize();
-        let direction = (position - ball_center).normalize();
-        println!("position {:?}", position);
-        println!("direction {:?}", direction);
-        println!("ball_center {:?}", ball_center);
-        velocity.0 = direction * MAX_SPEED;
+        ext_force.force = world_space.truncate() - ball_center;
+        ext_force.torque = 3.;
+    }
+}
+
+#[allow(clippy::type_complexity)]
+pub fn camera_follow(
+    mut cam: Query<&mut Transform, (With<Camera>, Without<LocalPlayer>)>,
+    q: Query<(&Transform, (With<LocalPlayer>, Without<Camera>))>,
+) {
+    let mut cam = cam.single_mut();
+    let (transform, _player) = q.single();
+
+    let delta = transform.translation - cam.translation;
+    cam.translation += delta * 0.1;
+}
+
+#[derive(Component)]
+pub struct SpeedLimit(f32);
+
+pub fn enforce_speed_limit(q: Query<(&mut Velocity, &SpeedLimit)>) {
+    for (velocity, speed_limit) in &mut q.iter() {
+        let max = Vec2::new(speed_limit.0, speed_limit.0);
+        velocity.linvel.clamp(-max, max);
     }
 }
