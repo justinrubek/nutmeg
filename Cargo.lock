@@ -2433,7 +2433,7 @@ dependencies = [
 
 [[package]]
 name = "nutmeg_client"
-version = "0.5.0"
+version = "0.6.0"
 dependencies = [
  "bevy",
  "bevy_egui",
@@ -2448,14 +2448,14 @@ dependencies = [
 
 [[package]]
 name = "nutmeg_core"
-version = "0.5.0"
+version = "0.6.0"
 dependencies = [
  "bevy",
 ]
 
 [[package]]
 name = "nutmeg_server"
-version = "0.5.0"
+version = "0.6.0"
 dependencies = [
  "bevy",
 ]

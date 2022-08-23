@@ -2,6 +2,17 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## 0.6.0 - 2022-08-23
+#### Features
+- Added food particles - (5dae087) - Justin Rubek
+- camera follows player's ball - (a767e46) - Justin Rubek
+#### Miscellaneous Chores
+- add license - (9556d94) - Justin Rubek
+#### Refactoring
+- tweak player speed and torque - (671d8c8) - Justin Rubek
+
+- - -
+
 ## 0.5.0 - 2022-08-23
 #### Features
 - implement rapier2d physics for ball - (a702456) - Justin Rubek
