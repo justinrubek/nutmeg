@@ -2,6 +2,12 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## 0.5.0 - 2022-08-23
+#### Features
+- implement rapier2d physics for ball - (a702456) - Justin Rubek
+
+- - -
+
 ## 0.4.7 - 2022-08-22
 #### Bug Fixes
 - rename script import in index.html - (4faffcc) - Justin Rubek
