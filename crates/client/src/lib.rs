@@ -87,7 +87,7 @@ pub fn setup(mut commands: Commands) {
             linvel: Vec2::new(1.0, 2.0),
             angvel: 0.0,
         })
-        .insert(SpeedLimit(50.0))
+        .insert(SpeedLimit(10.0))
         .insert(ColliderMassProperties::Density(2.0))
         .insert(ExternalForce {
             force: Vec2::new(2.0, 0.0),
@@ -137,7 +137,7 @@ pub fn capture_mouse_input(
         // Change the velocity to be towards the cursor
         // let direction = (position - ball_center).normalize();
         ext_force.force = world_space.truncate() - ball_center;
-        ext_force.torque = 3.;
+        ext_force.torque = 1.;
     }
 }
 
