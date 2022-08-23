@@ -1,5 +1,6 @@
 use bevy::prelude::*;
 use bevy_rapier2d::prelude::*;
+use rand::prelude::*;
 
 pub mod gui;
 
@@ -52,6 +53,8 @@ const BALL_STARTING_POSITION: Vec3 = Vec3::new(0.0, -50.0, 1.0);
 const BALL_SIZE: f32 = 30.0;
 pub const TIMESTEP: f64 = 1.0 / 60.0;
 
+const FOOD_SIZE: f32 = 7.0;
+
 #[derive(Component)]
 pub struct Ball;
 
@@ -90,14 +93,21 @@ pub fn setup(mut commands: Commands) {
             force: Vec2::new(2.0, 0.0),
             torque: 0.0,
         });
-    /*
-    .insert_bundle(MaterialMesh2dBundle {
-        mesh: meshes.add(shape::Circle::default().into()).into(),
-        material: materials.add(ColorMaterial::from(BALL_COLOR)),
-        transform: Transform::from_translation(BALL_STARTING_POSITION).with_scale(BALL_SIZE),
-        ..default()
-    });
-    */
+
+    // Food
+    let mut random = rand::thread_rng();
+    for _ in 0..100 {
+        let distance = 2000.0;
+        let x = random.gen_range(-distance..distance);
+        let y = random.gen_range(-distance..distance);
+        let position = Vec3::new(x, y, 0.0);
+
+        commands
+            .spawn()
+            .insert(Food(5))
+            .insert(Collider::ball(FOOD_SIZE))
+            .insert_bundle(TransformBundle::from(Transform::from_translation(position)));
+    }
 }
 
 /// Determines movement for the player controlled ball.
@@ -151,3 +161,6 @@ pub fn enforce_speed_limit(q: Query<(&mut Velocity, &SpeedLimit)>) {
         velocity.linvel.clamp(-max, max);
     }
 }
+
+#[derive(Component)]
+pub struct Food(u32);
