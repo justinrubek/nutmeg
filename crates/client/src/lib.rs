@@ -50,6 +50,7 @@ impl Plugin for HelloPlugin {
 
 const BALL_STARTING_POSITION: Vec3 = Vec3::new(0.0, -50.0, 1.0);
 const BALL_SIZE: f32 = 30.0;
+pub const TIMESTEP: f64 = 1.0 / 60.0;
 
 #[derive(Component)]
 pub struct Ball;
@@ -138,8 +139,7 @@ pub fn camera_follow(
     let mut cam = cam.single_mut();
     let (transform, _player) = q.single();
 
-    let delta = transform.translation - cam.translation;
-    cam.translation += delta * 0.1;
+    cam.translation = transform.translation
 }
 
 #[derive(Component)]
