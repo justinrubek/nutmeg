@@ -1,7 +1,7 @@
 use bevy::prelude::*;
 use bevy_egui::{egui, EguiContext, EguiPlugin};
 
-use crate::{Name, Person};
+use crate::people::data::{Name, Person};
 
 #[derive(Default)]
 pub struct GuiPlugin {}

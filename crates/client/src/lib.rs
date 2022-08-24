@@ -1,9 +1,13 @@
 use bevy::prelude::*;
 use bevy::time::FixedTimestep;
 use bevy::window::close_on_esc;
+use nutmeg_core::camera::systems::camera_follow;
+use nutmeg_core::constants::TIMESTEP;
 use nutmeg_core::gui::GuiPlugin;
+use nutmeg_core::input::systems::capture_mouse_input;
+use nutmeg_core::movement::systems::enforce_speed_limit;
 use nutmeg_core::physics::plugin::Rapier2dPhysicsPlugin;
-use nutmeg_core::{camera_follow, capture_mouse_input, enforce_speed_limit, setup, TIMESTEP};
+use nutmeg_core::setup;
 
 pub fn create_app() -> App {
     let mut app = App::new();
