@@ -1,11 +1,13 @@
 use bevy::prelude::*;
 use bevy_rapier2d::prelude::*;
 use constants::{BALL_SIZE, BALL_STARTING_POSITION, FOOD_SIZE};
+use food::data::{Food, FoodCollector, FOOD_COLLECTORS_GROUP, FOOD_GROUP};
 use movement::data::SpeedLimit;
 use rand::prelude::*;
 
 pub mod camera;
 pub mod constants;
+pub mod food;
 pub mod gui;
 pub mod input;
 pub mod movement;
@@ -27,8 +29,10 @@ pub fn setup(mut commands: Commands) {
         .spawn()
         .insert(Ball)
         .insert(LocalPlayer)
+        .insert(FoodCollector(BALL_SIZE as u32))
         .insert(RigidBody::Dynamic)
         .insert(Collider::ball(BALL_SIZE))
+        .insert(LockedAxes::ROTATION_LOCKED)
         .insert(GravityScale(0.0))
         .insert(Sensor)
         .insert_bundle(TransformBundle::from(Transform::from_translation(
@@ -61,6 +65,3 @@ pub fn setup(mut commands: Commands) {
             .insert_bundle(TransformBundle::from(Transform::from_translation(position)));
     }
 }
-
-#[derive(Component)]
-pub struct Food(u32);
