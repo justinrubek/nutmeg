@@ -2,6 +2,17 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## 0.7.0 - 2022-08-24
+#### Features
+- food is now destroyed when the player collides with it - (1adb10c) - Justin Rubek
+#### Refactoring
+- removed println - (ef5d9bf) - Justin Rubek
+- extract logic into separate folders - (411e4ee) - Justin Rubek
+- bundle physics into separate plugin - (6cbc92a) - Justin Rubek
+- pull game logic into nutmeg_core - (5989801) - Justin Rubek
+
+- - -
+
 ## 0.6.0 - 2022-08-23
 #### Features
 - Added food particles - (5dae087) - Justin Rubek
