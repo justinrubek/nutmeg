@@ -2,8 +2,9 @@ use bevy::prelude::*;
 use bevy_rapier2d::prelude::*;
 use rand::prelude::*;
 
+pub mod constants;
 pub mod gui;
-
+pub mod physics;
 #[derive(Component)]
 pub struct Name(String);
 

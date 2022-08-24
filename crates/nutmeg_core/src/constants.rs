@@ -1,0 +1,1 @@
+pub const DEFAULT_PIXELS_PER_METER: f32 = 100.0;
