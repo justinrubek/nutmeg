@@ -1,7 +1,7 @@
 use bevy::prelude::*;
 use bevy_rapier2d::prelude::*;
 use constants::{BALL_SIZE, BALL_STARTING_POSITION, FOOD_SIZE};
-use food::data::{Food, FoodCollector, FOOD_COLLECTORS_GROUP, FOOD_GROUP};
+use food::data::{Food, FoodCollector};
 use movement::data::SpeedLimit;
 use rand::prelude::*;
 
@@ -32,6 +32,7 @@ pub fn setup(mut commands: Commands) {
         .insert(FoodCollector(BALL_SIZE as u32))
         .insert(RigidBody::Dynamic)
         .insert(Collider::ball(BALL_SIZE))
+        .insert(ActiveEvents::COLLISION_EVENTS)
         .insert(LockedAxes::ROTATION_LOCKED)
         .insert(GravityScale(0.0))
         .insert(Sensor)

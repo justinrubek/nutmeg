@@ -25,20 +25,26 @@ pub fn player_eat_food(
     let filter = QueryFilter::default().exclude_dynamic();
 
     let collision = rapier_context.cast_shape(shape_pos, shape_rot, shape_vel, &shape, 1.0, filter);
-    if let Some((entity, toi)) = collision {
+    if let Some((entity, _toi)) = collision {
         food.0 += all_food.get(entity).unwrap().0;
         commands.entity(entity).despawn();
     }
 }
 
-pub fn collide_food(mut collisions: EventReader<CollisionEvent>, food: Query<&Food>) {
+pub fn collide_food(
+    mut collisions: EventReader<CollisionEvent>,
+    mut commands: Commands,
+    all_food: Query<&Food>,
+    mut player: Query<(&LocalPlayer, &mut FoodCollector, Entity)>,
+) {
+    let (_, mut food, player_ent) = player.single_mut();
+
     for collision in collisions.iter() {
-        match *collision {
-            CollisionEvent::Started(e1, e2, _) => {
-                println!("{:?}", e1);
-                println!("{:?}", e2);
+        if let CollisionEvent::Started(e1, e2, _) = collision {
+            if player_ent == *e1 && all_food.contains(*e2) {
+                food.0 += all_food.get(*e2).unwrap().0;
+                commands.entity(*e2).despawn();
             }
-            _ => {}
         }
     }
 }

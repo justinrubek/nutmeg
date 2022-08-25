@@ -3,7 +3,7 @@ use bevy::time::FixedTimestep;
 use bevy::window::close_on_esc;
 use nutmeg_core::camera::systems::camera_follow;
 use nutmeg_core::constants::TIMESTEP;
-use nutmeg_core::food::systems::{collide_food, player_eat_food};
+use nutmeg_core::food::systems::collide_food;
 use nutmeg_core::gui::GuiPlugin;
 use nutmeg_core::input::systems::capture_mouse_input;
 use nutmeg_core::movement::systems::enforce_speed_limit;
@@ -24,7 +24,7 @@ pub fn create_app() -> App {
         )
         .add_system(camera_follow)
         .add_system(enforce_speed_limit)
-        .add_system(player_eat_food)
+        // .add_system(player_eat_food)
         .add_system(collide_food)
         .add_system(close_on_esc);
 
