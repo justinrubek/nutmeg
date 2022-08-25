@@ -1,5 +1,5 @@
 use bevy::prelude::*;
-use bevy_rapier2d::prelude::*;
+use bevy_rapier2d::{prelude::*, rapier::prelude::SharedShape};
 
 use crate::player::data::LocalPlayer;
 
@@ -35,15 +35,21 @@ pub fn collide_food(
     mut collisions: EventReader<CollisionEvent>,
     mut commands: Commands,
     all_food: Query<&Food>,
-    mut player: Query<(&LocalPlayer, &mut FoodCollector, Entity)>,
+    mut player: Query<(&LocalPlayer, &mut FoodCollector, Entity, &Collider)>,
 ) {
-    let (_, mut food, player_ent) = player.single_mut();
+    let (_, mut food, player_ent, collider) = player.single_mut();
 
     for collision in collisions.iter() {
         if let CollisionEvent::Started(e1, e2, _) = collision {
             if player_ent == *e1 && all_food.contains(*e2) {
-                food.0 += all_food.get(*e2).unwrap().0;
+                let new_food_value = all_food.get(*e2).unwrap().0;
+                food.0 += new_food_value;
                 commands.entity(*e2).despawn();
+
+                // Update the size of the player's collider
+                commands
+                    .entity(player_ent)
+                    .insert(Collider::ball(food.0 as f32));
             }
         }
     }
