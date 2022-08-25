@@ -2,6 +2,12 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## 0.8.1 - 2022-08-25
+#### Bug Fixes
+- rename parallel feature from rapier2d - (89a6b9e) - Justin Rubek
+
+- - -
+
 ## 0.8.0 - 2022-08-25
 #### Build system
 - enable features for rapier - (d379e41) - Justin Rubek
