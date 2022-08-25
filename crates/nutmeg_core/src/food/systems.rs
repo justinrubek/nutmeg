@@ -1,5 +1,5 @@
 use bevy::prelude::*;
-use bevy_rapier2d::{prelude::*, rapier::prelude::SharedShape};
+use bevy_rapier2d::prelude::*;
 
 use crate::player::data::LocalPlayer;
 

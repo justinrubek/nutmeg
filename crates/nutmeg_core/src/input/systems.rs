@@ -30,6 +30,6 @@ pub fn capture_mouse_input(
         // Change the velocity to be towards the cursor
         // let direction = (position - ball_center).normalize();
         ext_force.force = world_space.truncate() - ball_center;
-        ext_force.torque = 1.;
+        ext_force.torque = 0.2;
     }
 }

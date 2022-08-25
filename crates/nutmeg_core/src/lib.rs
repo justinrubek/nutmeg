@@ -44,7 +44,7 @@ pub fn setup(mut commands: Commands) {
             linvel: Vec2::new(1.0, 2.0),
             angvel: 0.0,
         })
-        .insert(SpeedLimit(10.0))
+        .insert(SpeedLimit(0.1))
         .insert(ColliderMassProperties::Density(2.0))
         .insert(ExternalForce {
             force: Vec2::new(2.0, 0.0),
