@@ -2,6 +2,17 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## 0.8.0 - 2022-08-25
+#### Build system
+- enable features for rapier - (d379e41) - Justin Rubek
+#### Features
+- player now grows when eating - (016569a) - Justin Rubek
+- use collision for eating food instead of shape cast - (1a49bb8) - Justin Rubek
+#### Refactoring
+- tweak player speed and torque - (63782ca) - Justin Rubek
+
+- - -
+
 ## 0.7.0 - 2022-08-24
 #### Features
 - food is now destroyed when the player collides with it - (1adb10c) - Justin Rubek
