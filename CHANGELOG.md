@@ -2,6 +2,12 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## 0.9.0 - 2022-08-26
+#### Features
+- smoothed movement using velocity - (74f4e6d) - Justin Rubek
+
+- - -
+
 ## 0.8.1 - 2022-08-25
 #### Bug Fixes
 - rename parallel feature from rapier2d - (89a6b9e) - Justin Rubek
