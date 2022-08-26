@@ -31,6 +31,7 @@ pub fn setup(mut commands: Commands) {
         .insert(LocalPlayer)
         .insert(FoodCollector(BALL_SIZE as u32))
         .insert(RigidBody::Dynamic)
+        .insert(Velocity::zero())
         .insert(Collider::ball(BALL_SIZE))
         .insert(ActiveEvents::COLLISION_EVENTS)
         .insert(LockedAxes::ROTATION_LOCKED)
@@ -45,11 +46,7 @@ pub fn setup(mut commands: Commands) {
             angvel: 0.0,
         })
         .insert(SpeedLimit(0.1))
-        .insert(ColliderMassProperties::Density(2.0))
-        .insert(ExternalForce {
-            force: Vec2::new(2.0, 0.0),
-            torque: 0.0,
-        });
+        .insert(ColliderMassProperties::Density(2.0));
 
     // Food
     let mut random = rand::thread_rng();

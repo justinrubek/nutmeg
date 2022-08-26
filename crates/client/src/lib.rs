@@ -23,8 +23,6 @@ pub fn create_app() -> App {
                 .with_system(capture_mouse_input),
         )
         .add_system(camera_follow)
-        .add_system(enforce_speed_limit)
-        // .add_system(player_eat_food)
         .add_system(collide_food)
         .add_system(close_on_esc);
 

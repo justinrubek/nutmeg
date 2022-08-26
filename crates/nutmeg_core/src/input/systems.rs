@@ -2,6 +2,8 @@ use bevy::prelude::*;
 use bevy_rapier2d::prelude::*;
 
 use crate::camera::data::Camera;
+use crate::constants::{BALL_SIZE, BALL_SPEED};
+use crate::food::data::FoodCollector;
 use crate::player::data::LocalPlayer;
 
 /// Determines movement for the player controlled ball.
@@ -9,13 +11,13 @@ use crate::player::data::LocalPlayer;
 /// The direction of the force is determined by the input.
 pub fn capture_mouse_input(
     windows: Res<Windows>,
-    mut q: Query<(&LocalPlayer, &mut ExternalForce, &Transform)>,
+    mut q: Query<(&LocalPlayer, &mut Velocity, &Transform, &FoodCollector)>,
     camera: Query<&Transform, With<Camera>>,
 ) {
     let window = windows.get_primary().unwrap();
 
     let cursor_position = window.cursor_position();
-    let (_player, mut ext_force, transform) = q.single_mut();
+    let (_player, mut velocity, transform, size) = q.single_mut();
     let ball_center = transform.translation.truncate();
 
     if let Some(position) = cursor_position {
@@ -26,10 +28,15 @@ pub fn capture_mouse_input(
             0.0,
         );
         let cam_transform = camera.single();
-        let world_space = cam_transform.mul_vec3(norm);
-        // Change the velocity to be towards the cursor
-        // let direction = (position - ball_center).normalize();
-        ext_force.force = world_space.truncate() - ball_center;
-        ext_force.torque = 0.2;
+        let world_space = cam_transform.mul_vec3(norm).truncate();
+        // Determine direction between world_space and position
+        let direction = (world_space - ball_center).normalize();
+
+        // Determine the percentage difference the current size is from BALL_SIZE
+        let _size_diff = (size.0 as f32 / BALL_SIZE as f32).abs();
+        // TODO: Adjust speed based on size_diff
+
+        let new_vel = direction * BALL_SPEED;
+        velocity.linvel = new_vel;
     }
 }
