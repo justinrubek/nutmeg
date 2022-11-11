@@ -142,7 +142,7 @@
     apps = {
       client = {
         type = "app";
-        program = "${self.packages.${system}.client}/bin/client";
+        program = "${self.packages.${system}.client}/bin/nutmeg_client";
       };
       default = apps.client;
     };
