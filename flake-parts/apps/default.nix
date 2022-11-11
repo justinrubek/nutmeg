@@ -14,7 +14,7 @@
         type = "app";
         program = "${self.packages.${system}.client}/bin/client";
       };
-      default = apps.cli;
+      default = apps.client;
     };
   };
 }
