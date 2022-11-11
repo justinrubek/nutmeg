@@ -3,10 +3,6 @@
 
   inputs = {
     nixpkgs.url = "nixpkgs/nixos-unstable";
-    flake-utils = {
-      url = "github:numtide/flake-utils";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     flake-parts = {
       url = "github:hercules-ci/flake-parts";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -40,7 +36,7 @@
     ...
   }:
     flake-parts.lib.mkFlake {inherit self;} {
-      systems = flake-utils.lib.defaultSystems;
+      systems = ["x86_64-linux"];
       imports = [
         ./flake-parts
       ];
