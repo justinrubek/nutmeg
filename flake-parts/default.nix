@@ -3,21 +3,89 @@
   self,
   ...
 } @ part-inputs: {
-  imports = [
-    ./lib
-  ];
+  imports = [];
 
   perSystem = {
     config,
     pkgs,
+    lib,
     system,
     inputs',
     ...
   }: let
-    rust-nightly = self.lib.rust-nightly system;
-    rust-wasm = rust-nightly.override {
-      targets = ["wasm32-unknown-unknown"];
+    rust-latest = inputs'.fenix.packages.latest.toolchain;
+    rust-wasm = inputs'.fenix.packages.targets.wasm32-unknown-unknown.latest.toolchain;
+
+    craneLib = inputs.crane.lib.${system}.overrideToolchain rust-latest;
+    craneLibWasm = inputs.crane.lib.${system}.overrideToolchain rust-wasm;
+
+    common-build-args = rec {
+      src = lib.cleanSourceWith {
+        src = ../.;
+      };
+      pname = "nutmeg";
+
+      buildInputs = allBuildInputs [];
+      nativeBuildInputs = allNativeBuildInputs [];
+      LD_LIBRARY_PATH = pkgs.lib.makeLibraryPath buildInputs;
     };
+    deps-only = craneLib.buildDepsOnly ({
+        pname = "nutmeg";
+      }
+      // common-build-args);
+
+    clippy-check = craneLib.cargoClippy ({
+        cargoArtifacts = deps-only;
+        cargoClippyExtraArgs = "--all-features -- --deny warnings";
+      }
+      // common-build-args);
+
+    tests-check = craneLib.cargoNextest ({
+        cargoArtifacts = deps-only;
+        partitions = 1;
+        partitionType = "count";
+      }
+      // common-build-args);
+
+    client-package = craneLib.buildPackage ({
+        pname = "nutmeg-client";
+        cargoArtifacts = deps-only;
+        cargoExtraArgs = "--bin nutmeg_client";
+      }
+      // common-build-args);
+
+    server-package = craneLib.buildPackage ({
+        pname = "nutmeg-server";
+        cargoArtifacts = deps-only;
+        cargoExtraArgs = "--bin nutmeg_server";
+      }
+      // common-build-args);
+
+    wasm-package = craneLibWasm.buildPackage (rec {
+        pname = "nutmeg-wasm";
+        cargoArtifacts = deps-only;
+        cargoExtraArgs = "--bin nutmeg_wasm";
+        buildInputs = allBuildInputs [
+          pkgs.xorg.libxcb
+          pkgs.wasm-bindgen-cli
+        ];
+        nativeBuildInputs = allNativeBuildInputs [rust-wasm pkgs.wasm-pack pkgs.wasm-bindgen-cli];
+        LD_LIBRARY_PATH = pkgs.lib.makeLibraryPath buildInputs;
+        buildPhase = ''
+          # required to enable web_sys clipboard API
+          export RUSTFLAGS=--cfg=web_sys_unstable_apis
+
+          cargo build --release --target wasm32-unknown-unknown --manifest-path=crates/wasm/Cargo.toml
+
+          wasm-bindgen --out-dir $out/wasm --target web target/wasm32-unknown-unknown/release/nutmeg_wasm.wasm
+        '';
+        installPhase = ''
+          echo 'Skipping installPhase'
+        '';
+        doCheck = false;
+      }
+      // common-build-args);
+
     devTools = with pkgs; [
       rustfmt
       bacon
@@ -46,7 +114,7 @@
     devShells = {
       default = devShells.nightly;
       nightly = pkgs.mkShell rec {
-        buildInputs = allBuildInputs [rust-nightly] ++ devTools;
+        buildInputs = allBuildInputs [rust-latest] ++ devTools;
         nativeBuildInputs = bevyNativeBuildInputs;
         LD_LIBRARY_PATH = pkgs.lib.makeLibraryPath buildInputs;
         inherit (self.checks.${system}.pre-commit) shellHook;
@@ -58,68 +126,17 @@
         inherit (self.checks.${system}.pre-commit) shellHook;
       };
       ci = pkgs.mkShell rec {
-        buildInputs = allBuildInputs [rust-nightly] ++ devTools;
+        buildInputs = allBuildInputs [rust-latest];
         nativeBuildInputs = bevyNativeBuildInputs;
         LD_LIBRARY_PATH = pkgs.lib.makeLibraryPath buildInputs;
       };
     };
 
     packages = {
-      default = packages.cli;
-      client = pkgs.rustPlatform.buildRustPackage rec {
-        pname = "nutmeg-client";
-        version = "0.9.0";
-
-        buildAndTestSubdir = "crates/client";
-        src = self.lib.flake_source;
-        cargoLock = {
-          lockFile = self.lib.cargo_lock;
-        };
-        buildInputs = allBuildInputs [rust-nightly];
-        nativeBuildInputs = allNativeBuildInputs [];
-        LD_LIBRARY_PATH = pkgs.lib.makeLibraryPath buildInputs;
-      };
-      server = pkgs.rustPlatform.buildRustPackage rec {
-        pname = "nutmeg-server";
-        version = "0.9.0";
-
-        buildAndTestSubdir = "crates/server";
-        src = self.lib.flake_source;
-        cargoLock = {
-          lockFile = self.lib.cargo_lock;
-        };
-        buildInputs = allBuildInputs [rust-nightly];
-        nativeBuildInputs = allNativeBuildInputs [];
-        LD_LIBRARY_PATH = pkgs.lib.makeLibraryPath buildInputs;
-      };
-      client-wasm = pkgs.rustPlatform.buildRustPackage rec {
-        pname = "nutmeg-client-wasm";
-        version = "0.9.0";
-
-        buildAndTestSubdir = "crates/client";
-        src = self.lib.flake_source;
-        cargoLock = {
-          lockFile = self.lib.cargo_lock;
-        };
-        buildInputs = allBuildInputs [
-          pkgs.xorg.libxcb
-          pkgs.wasm-bindgen-cli
-        ];
-        nativeBuildInputs = allNativeBuildInputs [rust-wasm pkgs.wasm-pack pkgs.wasm-bindgen-cli];
-        LD_LIBRARY_PATH = pkgs.lib.makeLibraryPath buildInputs;
-        buildPhase = ''
-          # required to enable web_sys clipboard API
-          export RUSTFLAGS=--cfg=web_sys_unstable_apis
-
-          cargo build --release --target wasm32-unknown-unknown --manifest-path=crates/client/Cargo.toml
-
-          wasm-bindgen --out-dir $out/wasm --target web target/wasm32-unknown-unknown/release/nutmeg_client.wasm
-        '';
-        installPhase = ''
-          echo 'Skipping installPhase'
-        '';
-        doCheck = false;
-      };
+      default = packages.client;
+      client = client-package;
+      server = server-package;
+      client-wasm = wasm-package;
     };
 
     apps = {
