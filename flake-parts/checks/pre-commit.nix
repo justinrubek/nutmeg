@@ -1,13 +1,15 @@
 {
   self,
   inputs,
+  lib,
   ...
 } @ part-inputs: system:
 inputs.pre-commit-hooks.lib.${system}.run {
-  src = self.lib.flake_source;
+  src = lib.cleanSourceWith {
+    src = ../../.;
+  };
   hooks = {
     alejandra.enable = true;
-    rustfmt.enable = true;
     # clippy.enable = true;
   };
 }

@@ -57,7 +57,7 @@
     server-package = craneLib.buildPackage ({
         pname = "nutmeg-server";
         cargoArtifacts = deps-only;
-        cargoExtraArgs = "--bin nutmeg_server";
+        cargoExtraArgs = "--bin nutmeg-server";
       }
       // common-build-args);
 
@@ -149,6 +149,11 @@
 
     checks = {
       pre-commit = import ./checks/pre-commit.nix part-inputs system;
+      clippy = clippy-check;
+      tests = tests-check;
+      build_client = client-package;
+      build_server = server-package;
+      # build_wasm = wasm-package;
     };
   };
 }
