@@ -33,7 +33,7 @@ pub fn capture_mouse_input(
         let direction = (world_space - ball_center).normalize();
 
         // Determine the percentage difference the current size is from BALL_SIZE
-        let _size_diff = (size.0 as f32 / BALL_SIZE as f32).abs();
+        let _size_diff = (size.0 as f32 / BALL_SIZE).abs();
         // TODO: Adjust speed based on size_diff
 
         let new_vel = direction * BALL_SPEED;
