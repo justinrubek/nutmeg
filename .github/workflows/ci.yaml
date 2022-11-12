@@ -23,5 +23,5 @@ jobs:
           name: justinrubek
           authToken: "${{ secrets.CACHIX_AUTH_TOKEN }}"
 
-      - name: test
-        run: nix develop .#ci -c cargo test
+      - name: run flake checks
+        run: nix flake check
