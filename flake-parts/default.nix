@@ -29,10 +29,7 @@
       nativeBuildInputs = allNativeBuildInputs [];
       LD_LIBRARY_PATH = pkgs.lib.makeLibraryPath buildInputs;
     };
-    deps-only = craneLib.buildDepsOnly ({
-        pname = "nutmeg";
-      }
-      // common-build-args);
+    deps-only = craneLib.buildDepsOnly ({} // common-build-args);
 
     clippy-check = craneLib.cargoClippy ({
         cargoArtifacts = deps-only;
