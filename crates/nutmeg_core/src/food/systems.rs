@@ -37,7 +37,7 @@ pub fn collide_food(
     all_food: Query<&Food>,
     mut player: Query<(&LocalPlayer, &mut FoodCollector, Entity, &Collider)>,
 ) {
-    let (_, mut food, player_ent, collider) = player.single_mut();
+    let (_, mut food, player_ent, _collider) = player.single_mut();
 
     for collision in collisions.iter() {
         if let CollisionEvent::Started(e1, e2, _) = collision {
