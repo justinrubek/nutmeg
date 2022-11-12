@@ -15,9 +15,12 @@
   }: let
     rust-latest = inputs'.fenix.packages.latest.toolchain;
     rust-wasm = inputs'.fenix.packages.targets.wasm32-unknown-unknown.latest.toolchain;
+    rust-toolchain = inputs'.fenix.packages.combine [
+      rust-latest
+      rust-wasm
+    ];
 
-    craneLib = inputs.crane.lib.${system}.overrideToolchain rust-latest;
-    craneLibWasm = inputs.crane.lib.${system}.overrideToolchain rust-wasm;
+    craneLib = inputs.crane.lib.${system}.overrideToolchain rust-toolchain;
 
     common-build-args = rec {
       src = lib.cleanSourceWith {
@@ -58,7 +61,7 @@
       }
       // common-build-args);
 
-    wasm-package = craneLibWasm.buildPackage (rec {
+    wasm-package = craneLib.buildPackage (rec {
         pname = "nutmeg-wasm";
         cargoArtifacts = deps-only;
         cargoExtraArgs = "--bin nutmeg_wasm";
@@ -66,15 +69,15 @@
           pkgs.xorg.libxcb
           pkgs.wasm-bindgen-cli
         ];
-        nativeBuildInputs = allNativeBuildInputs [rust-wasm pkgs.wasm-pack pkgs.wasm-bindgen-cli];
+        nativeBuildInputs = allNativeBuildInputs [pkgs.wasm-pack pkgs.wasm-bindgen-cli];
         LD_LIBRARY_PATH = pkgs.lib.makeLibraryPath buildInputs;
         buildPhase = ''
           # required to enable web_sys clipboard API
           export RUSTFLAGS=--cfg=web_sys_unstable_apis
 
-          cargo build --release --target wasm32-unknown-unknown --manifest-path=crates/wasm/Cargo.toml
+          cargo build --release --target wasm32-unknown-unknown --manifest-path=crates/client/Cargo.toml
 
-          wasm-bindgen --out-dir $out/wasm --target web target/wasm32-unknown-unknown/release/nutmeg_wasm.wasm
+          wasm-bindgen --out-dir $out/wasm --target web target/wasm32-unknown-unknown/release/nutmeg_client.wasm
         '';
         installPhase = ''
           echo 'Skipping installPhase'
