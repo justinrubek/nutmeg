@@ -13,14 +13,67 @@
     inputs',
     ...
   }: let
-    rust-latest = inputs'.fenix.packages.latest.toolchain;
-    rust-wasm = inputs'.fenix.packages.targets.wasm32-unknown-unknown.latest.toolchain;
-    rust-toolchain = inputs'.fenix.packages.combine [
-      rust-latest
-      rust-wasm
+    wasm32CrossEnvVars = ''
+      export CC_wasm32_unknown_unknown="${pkgs.llvmPackages_14.clang-unwrapped}/bin/clang-14"
+      export CFLAGS_wasm32_unknown_unknown="-I ${pkgs.llvmPackages_14.libclang.lib}/lib/clang/14.0.1/include/"
+
+      # required to enable web_sys clipboard API
+      export RUSTFLAGS=--cfg=web_sys_unstable_apis
+    '';
+
+    # cross-compilation targets
+    crossTargets =
+      builtins.mapAttrs
+      (attr: target:
+        {
+          inherit attr;
+          extraEnvs = "";
+        }
+        // target)
+      {
+        "wasm32" = {
+          name = "wasm32-unknown-unknown";
+          extraEnvs = wasm32CrossEnvVars;
+        };
+      };
+
+    fenixChannel = inputs'.fenix.packages.latest;
+    fenixToolchain = fenixChannel.withComponents [
+      "rustc"
+      "cargo"
+      "clippy"
+      "rust-analysis"
+      "rust-src"
+      "rustfmt"
+      "llvm-tools-preview"
     ];
 
-    craneLib = inputs.crane.lib.${system}.overrideToolchain rust-toolchain;
+    fenixToolchainCrossAll = with inputs'.fenix.packages;
+      combine ([
+          latest.cargo
+          latest.rustc
+        ]
+        ++ (lib.attrsets.mapAttrsToList
+          (attr: target: targets.${target.name}.latest.rust-std)
+          crossTargets));
+
+    fenixToolchainCross =
+      builtins.mapAttrs
+      (attr: target:
+        with inputs'.fenix.packages;
+          combine [
+            latest.cargo
+            latest.rustc
+            targets.${target.name}.latest.rust-std
+          ])
+      crossTargets;
+
+    craneLib = inputs.crane.lib.${system}.overrideToolchain fenixToolchain;
+
+    craneLibCross =
+      builtins.mapAttrs
+      (attr: target: inputs.crane.lib.${system}.overrideToolchain fenixToolchainCross.${attr})
+      crossTargets;
 
     common-build-args = rec {
       src = lib.cleanSourceWith {
@@ -61,9 +114,10 @@
       }
       // common-build-args);
 
-    wasm-package = craneLib.buildPackage (rec {
+    wasm-deps = craneLibCross.wasm32.buildDepsOnly ({} // common-build-args);
+    wasm-package = craneLibCross.wasm32.buildPackage (rec {
         pname = "nutmeg-wasm";
-        cargoArtifacts = deps-only;
+        cargoArtifacts = wasm-deps;
         cargoExtraArgs = "--bin nutmeg_wasm";
         buildInputs = allBuildInputs [
           pkgs.xorg.libxcb
@@ -114,19 +168,19 @@
     devShells = {
       default = devShells.nightly;
       nightly = pkgs.mkShell rec {
-        buildInputs = allBuildInputs [rust-latest] ++ devTools;
+        buildInputs = allBuildInputs [fenixToolchain] ++ devTools;
         nativeBuildInputs = bevyNativeBuildInputs;
         LD_LIBRARY_PATH = pkgs.lib.makeLibraryPath buildInputs;
         inherit (self.checks.${system}.pre-commit) shellHook;
       };
       wasm = pkgs.mkShell rec {
-        buildInputs = allBuildInputs [rust-wasm pkgs.wasm-bindgen-cli] ++ devTools;
+        buildInputs = allBuildInputs [fenixToolchainCrossAll pkgs.wasm-bindgen-cli] ++ devTools;
         nativeBuildInputs = bevyNativeBuildInputs;
         LD_LIBRARY_PATH = pkgs.lib.makeLibraryPath buildInputs;
         inherit (self.checks.${system}.pre-commit) shellHook;
       };
       ci = pkgs.mkShell rec {
-        buildInputs = allBuildInputs [rust-latest];
+        buildInputs = allBuildInputs [fenixToolchain];
         nativeBuildInputs = bevyNativeBuildInputs;
         LD_LIBRARY_PATH = pkgs.lib.makeLibraryPath buildInputs;
       };
