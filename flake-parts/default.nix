@@ -13,20 +13,38 @@
     inputs',
     ...
   }: let
-    wasm32CrossEnvVars = ''
-      export CC_wasm32_unknown_unknown="${pkgs.llvmPackages_14.clang-unwrapped}/bin/clang-14"
-      export CFLAGS_wasm32_unknown_unknown="-I ${pkgs.llvmPackages_14.libclang.lib}/lib/clang/14.0.1/include/"
+    devTools = with pkgs; [
+      fenix-toolchain
+      rustfmt
+      bacon
+      cocogitto
+      inputs'.bomper.packages.cli
+      miniserve
+      pkgs.wasm-bindgen-cli
+    ];
 
-      # required to enable web_sys clipboard API
-      export RUSTFLAGS=--cfg=web_sys_unstable_apis
-    '';
+    bevyNativeBuildInputs = [pkgs.pkg-config pkgs.llvmPackages.bintools];
+    bevyBuildInputs = with pkgs; [
+      udev
+      alsaLib
+      vulkan-loader
+      xlibsWrapper
+      xorg.libXcursor
+      xorg.libXrandr
+      xorg.libXi
+      libxkbcommon
+      wayland
+      clang
+    ];
 
-    fenixToolchain = inputs'.fenix.packages.fromToolchainFile {
+    allBuildInputs = base: base ++ bevyBuildInputs;
+    allNativeBuildInputs = base: base ++ bevyNativeBuildInputs;
+    fenix-toolchain = inputs'.fenix.packages.fromToolchainFile {
       file = ../toolchain.toml;
       sha256 = "sha256-Xf9G2PXaLF/qAIB0ifePSmoPkkOPT2Ic6PkFJwDcZf0=";
     };
 
-    craneLib = inputs.crane.lib.${system}.overrideToolchain fenixToolchain;
+    craneLib = inputs.crane.lib.${system}.overrideToolchain fenix-toolchain;
 
     common-build-args = rec {
       src = lib.cleanSourceWith {
@@ -91,43 +109,17 @@
         doCheck = false;
       }
       // common-build-args);
-
-    devTools = with pkgs; [
-      rustfmt
-      bacon
-      cocogitto
-      inputs'.bomper.packages.cli
-      miniserve
-      pkgs.wasm-bindgen-cli
-    ];
-
-    bevyNativeBuildInputs = [pkgs.pkg-config pkgs.llvmPackages.bintools];
-    bevyBuildInputs = with pkgs; [
-      udev
-      alsaLib
-      vulkan-loader
-      xlibsWrapper
-      xorg.libXcursor
-      xorg.libXrandr
-      xorg.libXi
-      libxkbcommon
-      wayland
-      clang
-    ];
-
-    allBuildInputs = base: base ++ bevyBuildInputs;
-    allNativeBuildInputs = base: base ++ bevyNativeBuildInputs;
   in rec {
     devShells = {
       default = devShells.nightly;
       nightly = pkgs.mkShell rec {
-        buildInputs = allBuildInputs [fenixToolchain] ++ devTools;
+        buildInputs = allBuildInputs devTools;
         nativeBuildInputs = bevyNativeBuildInputs;
         LD_LIBRARY_PATH = pkgs.lib.makeLibraryPath buildInputs;
         inherit (self.checks.${system}.pre-commit) shellHook;
       };
       ci = pkgs.mkShell rec {
-        buildInputs = allBuildInputs [fenixToolchain];
+        buildInputs = allBuildInputs [fenix-toolchain];
         nativeBuildInputs = bevyNativeBuildInputs;
         LD_LIBRARY_PATH = pkgs.lib.makeLibraryPath buildInputs;
       };
@@ -138,7 +130,7 @@
       client = client-package;
       server = server-package;
       client-wasm = wasm-package;
-      rust-toolchain = fenixToolchain;
+      rust-toolchain = fenix-toolchain;
     };
 
     apps = {
