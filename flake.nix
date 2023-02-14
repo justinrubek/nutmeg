@@ -2,7 +2,8 @@
   description = "bevyjam 2 entry";
 
   inputs = {
-    nixpkgs.url = "nixpkgs/nixos-unstable";
+    # nixpkgs.url = "nixpkgs/nixos-unstable";
+    nixpkgs.url = "nixpkgs/nixos-22.11";
     flake-parts = {
       url = "github:hercules-ci/flake-parts";
       inputs.nixpkgs.follows = "nixpkgs";

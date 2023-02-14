@@ -1,4 +1,5 @@
 [workspace]
+version = "0.9.0"
 members = ["crates/*"]
 resolver = "2"
 
