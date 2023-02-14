@@ -2,6 +2,14 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [0.10.1](https://github.com/justinrubek/nutmeg/compare/0.10.0..0.10.1) - 2023-02-14
+#### Continuous Integration
+- add cocogitto to packages - ([792209a](https://github.com/justinrubek/nutmeg/commit/792209af12d382e5b3119ac26174ce485f89525d)) - [@justinrubek](https://github.com/justinrubek)
+#### Miscellaneous Chores
+- **(cog)** update changelog definition - ([9314913](https://github.com/justinrubek/nutmeg/commit/93149133070cdb23aef04eadf6c859061b961d20)) - [@justinrubek](https://github.com/justinrubek)
+
+- - -
+
 ## 0.10.0 - 2023-02-14
 #### Bug Fixes
 - fix pre-commit rustfmt - (7a6cbad) - Justin Rubek
