@@ -10,6 +10,6 @@ inputs.pre-commit-hooks.lib.${system}.run {
   };
   hooks = {
     alejandra.enable = true;
-    # clippy.enable = true;
+    rustfmt.enable = true;
   };
 }
