@@ -9,6 +9,3 @@ search_value = "nutmeg_core"
 
 [file."Cargo.lock"]
 search_value = "nutmeg"
-
-[file."flake-parts/packages/default.nix"]
-search_value = "nutmeg"
