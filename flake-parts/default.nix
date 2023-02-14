@@ -13,14 +13,19 @@
     inputs',
     ...
   }: let
-    devTools = with pkgs; [
+    devTools = [
       fenix-toolchain
-      rustfmt
-      bacon
-      cocogitto
+      pkgs.rustfmt
+      pkgs.bacon
+      pkgs.cocogitto
       inputs'.bomper.packages.cli
-      miniserve
+      pkgs.miniserve
       pkgs.wasm-bindgen-cli
+    ];
+
+    ciTools = [
+      fenix-toolchain
+      pkgs.cocogitto
     ];
 
     bevyNativeBuildInputs = [pkgs.pkg-config pkgs.llvmPackages.bintools];
@@ -119,7 +124,7 @@
         inherit (self.checks.${system}.pre-commit) shellHook;
       };
       ci = pkgs.mkShell rec {
-        buildInputs = allBuildInputs [fenix-toolchain];
+        buildInputs = allBuildInputs ciTools;
         nativeBuildInputs = bevyNativeBuildInputs;
         LD_LIBRARY_PATH = pkgs.lib.makeLibraryPath buildInputs;
       };
