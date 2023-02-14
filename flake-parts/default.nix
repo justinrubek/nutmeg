@@ -21,59 +21,12 @@
       export RUSTFLAGS=--cfg=web_sys_unstable_apis
     '';
 
-    # cross-compilation targets
-    crossTargets =
-      builtins.mapAttrs
-      (attr: target:
-        {
-          inherit attr;
-          extraEnvs = "";
-        }
-        // target)
-      {
-        "wasm32" = {
-          name = "wasm32-unknown-unknown";
-          extraEnvs = wasm32CrossEnvVars;
-        };
-      };
-
-    fenixChannel = inputs'.fenix.packages.latest;
-    fenixToolchain = fenixChannel.withComponents [
-      "rustc"
-      "cargo"
-      "clippy"
-      "rust-analysis"
-      "rust-src"
-      "rustfmt"
-      "llvm-tools-preview"
-    ];
-
-    fenixToolchainCrossAll = with inputs'.fenix.packages;
-      combine ([
-          latest.cargo
-          latest.rustc
-        ]
-        ++ (lib.attrsets.mapAttrsToList
-          (attr: target: targets.${target.name}.latest.rust-std)
-          crossTargets));
-
-    fenixToolchainCross =
-      builtins.mapAttrs
-      (attr: target:
-        with inputs'.fenix.packages;
-          combine [
-            latest.cargo
-            latest.rustc
-            targets.${target.name}.latest.rust-std
-          ])
-      crossTargets;
+    fenixToolchain = inputs'.fenix.packages.fromToolchainFile {
+      file = ../toolchain.toml;
+      sha256 = "sha256-Xf9G2PXaLF/qAIB0ifePSmoPkkOPT2Ic6PkFJwDcZf0=";
+    };
 
     craneLib = inputs.crane.lib.${system}.overrideToolchain fenixToolchain;
-
-    craneLibCross =
-      builtins.mapAttrs
-      (attr: target: inputs.crane.lib.${system}.overrideToolchain fenixToolchainCross.${attr})
-      crossTargets;
 
     common-build-args = rec {
       src = lib.cleanSourceWith {
@@ -114,10 +67,9 @@
       }
       // common-build-args);
 
-    wasm-deps = craneLibCross.wasm32.buildDepsOnly ({} // common-build-args);
-    wasm-package = craneLibCross.wasm32.buildPackage (rec {
+    wasm-package = craneLib.buildPackage (rec {
         pname = "nutmeg-wasm";
-        cargoArtifacts = wasm-deps;
+        cargoArtifacts = deps-only;
         cargoExtraArgs = "--bin nutmeg_wasm";
         buildInputs = allBuildInputs [
           pkgs.xorg.libxcb
@@ -131,7 +83,7 @@
 
           cargo build --release --target wasm32-unknown-unknown --manifest-path=crates/client/Cargo.toml
 
-          wasm-bindgen --out-dir $out/wasm --target web target/wasm32-unknown-unknown/release/nutmeg_client.wasm
+          ${pkgs.wasm-bindgen-cli}/bin/wasm-bindgen --out-dir $out/wasm --target web target/wasm32-unknown-unknown/release/nutmeg_client.wasm
         '';
         installPhase = ''
           echo 'Skipping installPhase'
@@ -146,6 +98,7 @@
       cocogitto
       inputs'.bomper.packages.cli
       miniserve
+      pkgs.wasm-bindgen-cli
     ];
 
     bevyNativeBuildInputs = [pkgs.pkg-config pkgs.llvmPackages.bintools];
@@ -173,12 +126,6 @@
         LD_LIBRARY_PATH = pkgs.lib.makeLibraryPath buildInputs;
         inherit (self.checks.${system}.pre-commit) shellHook;
       };
-      wasm = pkgs.mkShell rec {
-        buildInputs = allBuildInputs [fenixToolchainCrossAll pkgs.wasm-bindgen-cli] ++ devTools;
-        nativeBuildInputs = bevyNativeBuildInputs;
-        LD_LIBRARY_PATH = pkgs.lib.makeLibraryPath buildInputs;
-        inherit (self.checks.${system}.pre-commit) shellHook;
-      };
       ci = pkgs.mkShell rec {
         buildInputs = allBuildInputs [fenixToolchain];
         nativeBuildInputs = bevyNativeBuildInputs;
@@ -191,6 +138,7 @@
       client = client-package;
       server = server-package;
       client-wasm = wasm-package;
+      rust-toolchain = fenixToolchain;
     };
 
     apps = {
