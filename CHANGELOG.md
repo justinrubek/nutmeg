@@ -2,6 +2,36 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## 0.10.0 - 2023-02-14
+#### Bug Fixes
+- fix pre-commit rustfmt - (7a6cbad) - Justin Rubek
+- fix wasm builds in nix - (3d868ed) - Justin Rubek
+- rename client binary in flake app - (2307c2a) - Justin Rubek
+- add indexmap to deps to fix petgraph error - (59865bf) - Justin Rubek
+- use correct default app - (ef1cc0f) - Justin Rubek
+#### Build system
+- **(nix)** rework rust toolchain definition - (04fc966) - Justin Rubek
+- **(nix)** remove package builds from checks - (f813c4d) - Justin Rubek
+- **(nix)** unify rust toolchains - (ed011fd) - Justin Rubek
+- **(nix)** rename deps-only build - (6a55ad6) - Justin Rubek
+- **(nix)** configure checks - (5a995a3) - Justin Rubek
+- **(nix)** remove flake-utils input - (6dccbc3) - Justin Rubek
+- **(nix)** switch to crane and fenix for rust tooling - (71d9e6e) - Justin Rubek
+- **(nix)** consolidate flake into multiple parts - (f32559a) - Justin Rubek
+#### Continuous Integration
+- remove github actions tests - (056f49e) - Justin Rubek
+- run flake checks instead of cargo tests - (7b8ff3b) - Justin Rubek
+#### Miscellaneous Chores
+- **(bomper)** remove nix files from config - (1bdaebe) - Justin Rubek
+- add x86 toolchain - (9570e89) - Justin Rubek
+- clean up flake - (6266b18) - Justin Rubek
+- remove version from workspace - (d60e9e7) - Justin Rubek
+- fix clippy issues - (9841717) - Justin Rubek
+#### Style
+- enable rustfmt - (7fbd603) - Justin Rubek
+
+- - -
+
 ## 0.9.0 - 2022-08-26
 #### Features
 - smoothed movement using velocity - (74f4e6d) - Justin Rubek
