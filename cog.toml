@@ -3,12 +3,21 @@ branch_whitelist = []
 pre_bump_hooks = [
     "bomper {{latest}} {{version}}"
 ]
-post_bump_hooks = []
+post_bump_hooks = [
+    "git push",
+    "git push origin {{version}}"
+]
 
 [commit_types]
 
 [changelog]
 path = "CHANGELOG.md"
-authors = []
+template = "remote"
+remote = "github.com"
+repository = "nutmeg"
+owner = "justinrubek"
+authors = [
+    { signature = "Justin Rubek", username = "justinrubek" }
+]
 
 [bump_profiles]
