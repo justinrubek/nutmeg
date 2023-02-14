@@ -20,6 +20,8 @@ jobs:
         with:
           extra_nix_config: |
             access-tokens = github=${{ secrets.GITHUB_TOKEN }}
+            extra-substituers = https://cache.garnix.io
+            extra-trusted-public-keys = cache.garnix.io:CTFPyKSLcx5RMJKfLo5EEPUObbA78b0YQ2DTCJXqr9g=
 
       - name: Setup nix cache
         uses: cachix/cachix-action@v10
