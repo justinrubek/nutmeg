@@ -2,6 +2,12 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [0.10.2](https://github.com/justinrubek/nutmeg/compare/0.10.1..0.10.2) - 2023-02-14
+#### Continuous Integration
+- use garnix cache - ([43237d9](https://github.com/justinrubek/nutmeg/commit/43237d92db06f1797a9a27886b2b557de57af231)) - [@justinrubek](https://github.com/justinrubek)
+
+- - -
+
 ## [0.10.1](https://github.com/justinrubek/nutmeg/compare/0.10.0..0.10.1) - 2023-02-14
 #### Continuous Integration
 - add cocogitto to packages - ([792209a](https://github.com/justinrubek/nutmeg/commit/792209af12d382e5b3119ac26174ce485f89525d)) - [@justinrubek](https://github.com/justinrubek)
