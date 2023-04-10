@@ -20,10 +20,7 @@
       url = "github:cachix/pre-commit-hooks.nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    gitignore = {
-      url = "github:hercules-ci/gitignore.nix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    nix-filter.url = "github:numtide/nix-filter";
     bomper = {
       url = "github:justinrubek/bomper";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -39,6 +36,7 @@
     flake-parts.lib.mkFlake {inherit self;} {
       systems = ["x86_64-linux"];
       imports = [
+        ./flake-parts/rust-toolchain.nix
         ./flake-parts
       ];
     };

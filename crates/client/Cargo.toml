@@ -1,6 +1,6 @@
 [package]
 name = "nutmeg_client"
-version = "0.10.3"
+version = { workspace = true }
 edition = "2021"
 
 [lib]
