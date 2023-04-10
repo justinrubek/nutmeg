@@ -119,8 +119,7 @@
     inherit checks packages;
 
     devShells = {
-      default = devShells.nightly;
-      nightly = pkgs.mkShell rec {
+      default = pkgs.mkShell rec {
         packages = withExtraPackages devTools;
         LD_LIBRARY_PATH = pkgs.lib.makeLibraryPath packages;
         inherit (self.checks.${system}.pre-commit) shellHook;
