@@ -1,5 +1,5 @@
 [package]
-name = "nutmeg_client"
+name = "nutmeg-client"
 version = { workspace = true }
 edition = "2021"
 
@@ -7,7 +7,7 @@ edition = "2021"
 # crate-type = ["cdylib", "rlib"]
 
 [dependencies]
-nutmeg_core = { path = "../nutmeg_core" }
+nutmeg-core = { path = "../nutmeg_core" }
 bevy = { version = "0.8.0" }
 bevy_egui = { version = "0.15", default-features = false, features = ["open_url", "default_fonts"] }
 bevy_rapier2d = { version = "0.16.1", features = ["simd-nightly"] }

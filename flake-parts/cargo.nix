@@ -79,7 +79,7 @@
       client = craneLib.buildPackage ({
           pname = "nutmeg-client";
           cargoArtifacts = deps-only;
-          cargoExtraArgs = "--bin nutmeg_client";
+          cargoExtraArgs = "--bin nutmeg-client";
         }
         // common-build-args);
 
@@ -93,7 +93,7 @@
       wasm = craneLib.buildPackage (rec {
           pname = "nutmeg-wasm";
           cargoArtifacts = deps-only;
-          cargoExtraArgs = "--bin nutmeg_wasm";
+          cargoExtraArgs = "--bin nutmeg-wasm";
           buildInputs = [
             pkgs.xorg.libxcb
             pkgs.wasm-bindgen-cli
@@ -106,7 +106,7 @@
 
             cargo build --release --target wasm32-unknown-unknown --manifest-path=crates/client/Cargo.toml
 
-            ${pkgs.wasm-bindgen-cli}/bin/wasm-bindgen --out-dir $out/wasm --target web target/wasm32-unknown-unknown/release/nutmeg_client.wasm
+            ${pkgs.wasm-bindgen-cli}/bin/wasm-bindgen --out-dir $out/wasm --target web target/wasm32-unknown-unknown/release/nutmeg-client.wasm
           '';
           installPhase = ''
             echo 'Skipping installPhase'
@@ -133,7 +133,7 @@
     apps = {
       client = {
         type = "app";
-        program = "${self.packages.${system}.client}/bin/nutmeg_client";
+        program = "${self.packages.${system}.client}/bin/nutmeg-client";
       };
       default = apps.client;
     };

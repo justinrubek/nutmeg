@@ -2437,14 +2437,14 @@ dependencies = [
 ]
 
 [[package]]
-name = "nutmeg_client"
+name = "nutmeg-client"
 version = "0.10.3"
 dependencies = [
  "bevy",
  "bevy_egui",
  "bevy_rapier2d",
  "console_error_panic_hook",
- "nutmeg_core",
+ "nutmeg-core",
  "rand",
  "serde",
  "tracing-subscriber",
@@ -2453,7 +2453,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "nutmeg_core"
+name = "nutmeg-core"
 version = "0.10.3"
 dependencies = [
  "bevy",
@@ -2464,7 +2464,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "nutmeg_server"
+name = "nutmeg-server"
 version = "0.10.3"
 dependencies = [
  "bevy",
