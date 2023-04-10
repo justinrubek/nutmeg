@@ -1,5 +1,5 @@
 [package]
-name = "nutmeg_server"
+name = "nutmeg-server"
 version = { workspace = true }
 edition = "2021"
 
