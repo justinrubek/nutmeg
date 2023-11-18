@@ -15,7 +15,7 @@ bevy_rapier2d = { version = "0.16.1", features = ["simd-nightly"] }
 # egui = "0.18.1"
 rand = "0.8.5"
 serde = { version = "1.0.140", features = ["derive"] }
-wasm-bindgen = "=0.2.83"
+wasm-bindgen = "=0.2.84"
 
 # native:
 [target.'cfg(not(target_arch = "wasm32"))'.dependencies]

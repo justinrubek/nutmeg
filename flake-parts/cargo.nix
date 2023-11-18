@@ -122,7 +122,6 @@
       default = pkgs.mkShell rec {
         packages = withExtraPackages devTools;
         LD_LIBRARY_PATH = pkgs.lib.makeLibraryPath packages;
-        inherit (self.checks.${system}.pre-commit) shellHook;
       };
       ci = pkgs.mkShell rec {
         packages = withExtraPackages ciTools;
