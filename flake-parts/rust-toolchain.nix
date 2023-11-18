@@ -14,7 +14,7 @@
   }: let
     fenix-toolchain = inputs'.fenix.packages.fromToolchainFile {
       file = ../toolchain.toml;
-      sha256 = "sha256-LnvKbTUeYmXkynJvVjTYmc1FsZaRiuLr8gviAac7D9Y=";
+      sha256 = "sha256-PZjjJ2eeY5keN6NtGH9V555p3qpiVWxYtZj/LFkQ+DA=";
     };
   in rec {
     packages = {
